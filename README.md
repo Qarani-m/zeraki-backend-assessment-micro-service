@@ -1,4 +1,4 @@
-# zeraki-backend-assessment-micro-service (I will be graddually be building this, over-engineer it ie.)
+# zeraki-backend-assessment-micro-service (I will graddually be building this, ie. i will over-engineer)
 
 Just incase you are wondering why this part is not complete might i mention i saw the email 12 hours to the deadline (i take full responsibility for  this) and due to time contraints i was only able to deliver the monolithic applications only
 
