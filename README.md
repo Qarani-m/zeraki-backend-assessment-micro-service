@@ -1,4 +1,4 @@
-# zeraki-backend-assessment-micro-service
+# zeraki-backend-assessment-micro-service (I will graddually be building this, ie. i will over-engineer)
 
 Just incase you are wondering why this part is not complete might i mention i saw the email 12 hours to the deadline (i take full responsibility for  this) and due to time contraints i was only able to deliver the monolithic applications only
 
@@ -21,6 +21,8 @@ Here are some reasons why you should consider me for your project:
 3. **Intermediate Docker and Docker Compose Skills:** I have intermediate-level knowledge of Docker and Docker Compose. I can containerize applications effectively, manage containerized environments, and orchestrate multi-container applications using Docker Compose.
 
 4. **CI/CD Pipeline Experience:** While I have beginner-level knowledge in Jenkins, I possess intermediate-level knowledge in GitHub Actions. I can set up continuous integration and continuous deployment pipelines to automate software delivery processes, ensuring faster and more reliable releases.
+   
+5. **Microservice Architecture Expertise:** I am well-versed in microservice architecture, including event-driven microservice architecture using RabbitMQ and Apache Kafka. I understand the principles of microservices, service discovery, load balancing, and fault tolerance, and can design and implement scalable and resilient distributed systems.
 
 If you're interested in seeing my solutions using microservice architecture or have any further questions, please feel free to reach out to me at [karanimartin17@gmail.com](mailto:karanimartin17@gmail.com).
 
