@@ -24,15 +24,11 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public String addStudent(StudentRequest studentRequest) throws Exception {
         List<InstitutionEntity> institutionIdList = institutionRepository.findByNameContaining(studentRequest.getInstitution());
-
-
-
         Long institutionId = null;
         if(institutionIdList.isEmpty()){
             throw new Exception("Institution with name: "+studentRequest.getInstitution()+" does not Exist");
         }
         institutionId = institutionIdList.get(0).getId();
-
         Optional<InstitutionEntity> institutionEntity = institutionRepository.findById(institutionId);
         if(institutionEntity.isEmpty()){
             throw new Exception("Institution with name2: "+studentRequest.getInstitution()+" does not Exist");
