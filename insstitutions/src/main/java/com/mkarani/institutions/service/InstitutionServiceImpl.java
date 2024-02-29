@@ -44,7 +44,7 @@ public class InstitutionServiceImpl implements InstitutionService{
     @Override
     public List<InstitutionEntity> getAllInstitutions() {
         List<InstitutionEntity> institutionEntities = institutionRepository.findAll();
-        if (institutionEntities.isEmpty(){
+        if (institutionEntities.isEmpty()){
             return new ArrayList<>();
         }
         return institutionEntities;
