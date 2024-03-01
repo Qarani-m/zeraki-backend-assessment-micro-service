@@ -58,6 +58,14 @@ public class InstitutionController {
         List<InstitutionEntity> sortedInstitutions = institutionService.sortInstitutionsByName(direction);
         return ResponseEntity.ok().body(sortedInstitutions);
     }
+    @GetMapping("/find-by-id/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id){
+        try{
+            return ResponseEntity.ok().body(institutionService.findById(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     // Endpoint to delete an institution
     @DeleteMapping("/delete/{id}")

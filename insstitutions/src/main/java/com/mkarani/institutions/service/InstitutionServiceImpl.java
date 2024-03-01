@@ -10,6 +10,7 @@ import com.mkarani.institutions.exceptions.DeletionErrorException;
 import com.mkarani.institutions.exceptions.InstitutionExistsException;
 import com.mkarani.institutions.repository.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,7 +59,11 @@ public class InstitutionServiceImpl implements InstitutionService{
     }
     @Override
     public List<InstitutionEntity> searchInstitutionsByName(String name) {
-        return institutionRepository.findByNameContaining(name);
+        List<InstitutionEntity> institutionEntities = institutionRepository.findByNameContaining(name);
+        if(institutionEntities.isEmpty()){
+            return new ArrayList<>();
+        }
+        return institutionEntities;
     }
 
     @Override
@@ -99,6 +104,11 @@ public class InstitutionServiceImpl implements InstitutionService{
             throw  new Exception("No institution with Id"+ institutionId.toString());
         }
         return institution.get().getCoursesOffered();
+    }
+
+    @Override
+    public Optional<InstitutionEntity> findById(Long id) {
+        return  institutionRepository.findById(id);
     }
 
 

@@ -119,4 +119,14 @@ public class CourseServicesImpl implements CoursesService{
     public List<CourseEntity> getCoursesByInstitution2(Long institutionId) {
         return null;
     }
+
+    @Override
+    public List<CourseEntity> findByCourseNameContaining(String courseName) {
+        return courseRepository.findByCourseNameContaining(courseName);
+    }
+
+    @Override
+    public Optional<CourseEntity> findById(Long id) {
+        return courseRepository.findById(id);
+    }
 }

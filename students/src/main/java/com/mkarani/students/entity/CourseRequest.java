@@ -1,4 +1,4 @@
-package com.mkarani.students.dto;
+package com.mkarani.students.entity;
 
 
 import lombok.*;
@@ -11,5 +11,4 @@ import lombok.*;
 public class CourseRequest {
     private String courseCode;
     private String name;
-
 }

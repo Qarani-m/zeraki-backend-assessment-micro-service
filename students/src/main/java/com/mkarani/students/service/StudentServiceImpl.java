@@ -3,38 +3,82 @@ package com.mkarani.students.service;
 
 import com.mkarani.students.dto.ChangeInstitutionDto;
 import com.mkarani.students.dto.StudentRequest;
+import com.mkarani.students.entity.CourseEntity;
+import com.mkarani.students.entity.InstitutionEntity;
 import com.mkarani.students.entity.StudentEntity;
 import com.mkarani.students.exceptions.InstitutionExistsException;
 import com.mkarani.students.exceptions.StudentExistError;
 import com.mkarani.students.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StudentServiceImpl implements StudentService{
     @Autowired
     private StudentRepository studentRepository;
 
+    private void handleRestCommunication(RestTemplate template,String url, Object parameter,Object responseType){
+        ResponseEntity<List<CourseEntity>> courseIdResponse = template.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<CourseEntity>>() {},
+                parameter.toString()
+        );
+
+    }
 
     @Override
     public String addStudent(StudentRequest studentRequest) throws Exception {
-        List<InstitutionEntity> institutionIdList = institutionRepository.findByNameContaining(studentRequest.getInstitution());
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<List<InstitutionEntity>> response = template.exchange(
+                "http://localhost:9896/api/institutions/search/{name}",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<InstitutionEntity>>() {},
+                studentRequest.getName()
+        );
+        List<InstitutionEntity> institutionIdList = response.getBody();
         Long institutionId = null;
+        assert institutionIdList != null;
         if(institutionIdList.isEmpty()){
             throw new Exception("Institution with name: "+studentRequest.getInstitution()+" does not Exist");
         }
         institutionId = institutionIdList.get(0).getId();
-        Optional<InstitutionEntity> institutionEntity = institutionRepository.findById(institutionId);
-        if(institutionEntity.isEmpty()){
+        ResponseEntity<Optional<InstitutionEntity>> institutionEntity = template.exchange(
+                "http://localhost:9896/api/institutions/find-by-id/{id}",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Optional<InstitutionEntity>>() {},
+                institutionId
+        );
+        if(Objects.requireNonNull(institutionEntity.getBody()).isEmpty()){
             throw new Exception("Institution with name2: "+studentRequest.getInstitution()+" does not Exist");
         }
-        Long courseId = courseRepository.findByCourseNameContaining(studentRequest.getCourse()).get(0).getId();
-        Optional<CourseEntity> courseEntity = courseRepository.findById(courseId);
+        ResponseEntity<List<CourseEntity>> courseIdResponse = template.exchange(
+                "http://localhost:9896/api/courses/findByCourseNameContaining/{courseName}",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<CourseEntity>>() {},
+                studentRequest.getCourse()
+        );
+
+        Long courseId = Objects.requireNonNull(courseIdResponse.getBody()).get(0).getId();
+        ResponseEntity<Optional<CourseEntity> > courseEntityResponse = template.exchange(
+                "http://localhost:9896/api/courses/find-by-id/{id}",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Optional<CourseEntity> >() {},
+                courseId
+        );
+
+        Optional<CourseEntity> courseEntity = courseEntityResponse.getBody();
         if(courseEntity.isEmpty()){
             throw new Exception("Course with name: "+studentRequest.getCourse()+" does not Exist");
         }
@@ -47,8 +91,12 @@ public class StudentServiceImpl implements StudentService{
                 .build();
         try {
             studentRepository.save(studentEntity);
-            InstitutionEntity institution = institutionEntity.get();
+            InstitutionEntity institution = institutionEntity.getBody().get();
             institution.setStudentReg(Collections.singletonList(studentRequest.getRegNumber()));
+
+
+
+
             institution.setStudentCount(institution.getStudentCount() + 1);
             institutionRepository.save(institution);
             CourseEntity course = courseEntity.get();
@@ -60,6 +108,8 @@ public class StudentServiceImpl implements StudentService{
             return e.getMessage();
         }
     }
+
+
 
     @Override
     public void deleteStudent(Long studentId) {

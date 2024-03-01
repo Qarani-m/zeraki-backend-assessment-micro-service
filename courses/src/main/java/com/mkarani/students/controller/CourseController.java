@@ -30,6 +30,25 @@ public class CourseController {
         }
     }
 
+    @GetMapping("/findByCourseNameContaining/{courseName}")
+    public  ResponseEntity<?> getCourseByName(@PathVariable String courseName){
+        try{
+            return ResponseEntity.ok().body(courseService.findByCourseNameContaining(courseName));
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @GetMapping("/find-by-id/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id){
+
+        try {
+            return ResponseEntity.ok().body(courseService.findById(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
     //
 // Endpoint to filter courses by searching
     @GetMapping("/search/{keyword}")
