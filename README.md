@@ -1,7 +1,5 @@
 # zeraki-backend-assessment-micro-service (I will graddually be building this, ie. i will over-engineer)
 
-Just incase you are wondering why this part is not complete might i mention i saw the email 12 hours to the deadline (i take full responsibility for  this) and due to time contraints i was only able to deliver the monolithic applications only
-
 Here are the reason i put into consideration in deciding which to create first, monolithic or microservice
 
 1: Development timeline : A monolithic app was far much faster to create, test, dockerize and deploy
